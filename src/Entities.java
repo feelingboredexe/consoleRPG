@@ -1,14 +1,13 @@
 import java.util.Random;
 
 public class Entities {
-	int maxHealth;
-	int health;
+	int maxHealth, health;
 	int level;
 	int damage;
 	int expMultiplier;
 	String name;
 	Abilities[] abilityList = new Abilities[5];
-	
+
 	public int takeDmg(int attackerDamage, Random damageMultiplier, int critChance, double critDamage) {
 		int crit = damageMultiplier.nextInt(100) + 1;
 		double critMultiplier = 1;
@@ -23,8 +22,8 @@ public class Entities {
 }
 
 class Player extends Entities {
-	int exp;
-	Items[] items = new Items[100];
+	int exp; // player experience
+	Items[] items = new Items[100]; // player items
 	Weapons weapon;
 	int itemIndex = 0;
 	boolean guarding;
@@ -80,34 +79,10 @@ class Player extends Entities {
 
 class Slime extends Entities {
 	public Slime(int mobLevel) {
-		health = (int)(0.3*((mobLevel-1)*(mobLevel-1))) + 5;
-		damage = (int)(0.03*(0.7*((mobLevel - 1)*(mobLevel - 1)))) + 1;
+		health = (int) (0.3 * ((mobLevel - 1) * (mobLevel - 1))) + 5;
+		damage = (int) (0.03 * (0.7* ((mobLevel - 1) * (mobLevel - 1)))) + 1;
 		level = mobLevel;
 		expMultiplier = 1;
 		name = "Slime";
 	}
-}
-
-class Items {
-	int rarity;
-	String name;
-}
-
-class Weapons extends Items {
-	int damage;
-	String damageType;
-}
-
-class BasicSword extends Weapons {
-	public BasicSword(int userLevel) {
-		damage = userLevel * 3;
-		damageType = "Slashing";
-		rarity = 0;
-		name = "Training Sword";
-	}
-}
-
-class Abilities {
-	int cooldown;
-	boolean castable;
 }
