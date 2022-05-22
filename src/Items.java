@@ -1,5 +1,5 @@
 public class Items {
-    int rarity;
+    int rarity; // 4 tiers of item rarity, 0 - Common, 1 - Uncommon, 2 - Rare, 3 - Legendary
     String name;
 }
 
@@ -26,5 +26,8 @@ class BoxingGloves extends Weapons {
         damage = 2;
         critChance = 31;
         rarity = 1;
+        critDamage = 15;
+        damageType = "Physical";
+        name = "Boxing Gloves";
     }
 }

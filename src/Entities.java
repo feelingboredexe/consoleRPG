@@ -18,7 +18,11 @@ public class Entities {
 			critMultiplier += critDamage; // Modify crit multiplier to have added crit damage onto it
 		}
 		int takenDamage = attackerDamage * (int)((((int)((0.5 + 1.3 * damageMultiplier.nextDouble()) + 0.5)) * critMultiplier) + 0.5);
-		health -= takenDamage;
+		if (health - takenDamage < 0) {
+			health = 0;
+		} else {
+			health -= takenDamage;
+		}
 		return takenDamage;
 	}
 }
@@ -78,6 +82,14 @@ class Player extends Entities {
 		System.out.println("You have " + damage + " damage");
 		System.out.println("You have " + exp + " experience points");
 		System.out.println("You are at level " + level);
+	}
+
+	public void displayInventory() {
+		for (Items item: items) {
+			if(!(item == null)) {
+				System.out.println(item.name);
+			}
+		}
 	}
 }
 

@@ -11,6 +11,7 @@ public class GameInstance {
 		Entities[] hostileMonsters;
 		Random mobMaker = new Random();
 		Random damageMultiplier = new Random();
+		Random itemGen = new Random();
 		Scanner input = new Scanner(System.in);
 		Player memberOne = new Player(0);
 		memberOne.setMaxHealth();
@@ -48,6 +49,8 @@ public class GameInstance {
 					System.out.println("You won!" + "\nGained " + expGain + " exp!");
 					// Add exp
 					memberOne.addExp(expGain);
+					// Battle rewards
+					GameMethods.battleRewards(memberOne, itemGen);
 					// Reset player health
 					memberOne.setMaxHealth();
 				} else {

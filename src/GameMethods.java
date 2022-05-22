@@ -107,16 +107,62 @@ public class GameMethods {
 			}
 		}
 	}
+
+	public static void battleRewards(Player player, Random itemGen) {
+		int itemValue = itemGen.nextInt(100) + 1;
+		int weaponRarity;
+		boolean recievedWeapon;
+		if (itemValue > 50) { // 50% chance to not get a weapon
+			recievedWeapon = false;
+		} else if (itemValue > 16) { // 34% chance for common
+			weaponRarity = 0;
+			recievedWeapon = true;
+		} else if (itemValue > 3) { // 13% chance for uncommon
+			weaponRarity = 1;
+			recievedWeapon = true;
+		} else if (itemValue > 1) { // 2% chance for rare
+			weaponRarity = 2;
+			recievedWeapon = true;
+		} else { // 1% chance for legendary
+			weaponRarity = 3;
+			recievedWeapon = true;
+		}
+		if(recievedWeapon) {
+			BasicSword basicSword = new BasicSword();
+			player.addItem(basicSword);
+			System.out.println("You found the " + basicSword.name);
+		}
+	}
 	
 	public static void forge(Scanner input, Player player) {
 		char action;
+		String itemName;
+		boolean itemExists;
 		// Menu to select actions
-		System.out.println("What would you like to do at the forge? " + "\n[0] - Check self");
+		System.out.println("What would you like to do at the forge? " + "\n[0] - Check self" + "\n[1] - Equip item");
 		action = input.next().charAt(0);
 		if (action == '0') { // If the player chooses to inspect themselves
 			player.inspectSelf();
 		} else if (action == '1') {
-
+			player.displayInventory();
+			do {
+				itemExists = false;
+				System.out.println("Which item would you like to equip? ");
+				itemName = input.nextLine();
+				for(Items item: player.items) {
+					if (!(item == null)) {
+						if (item.name.equals(itemName)) {
+							itemExists = true;
+							if(item instanceof Weapons) {
+								player.equipWeapon((Weapons) item);
+							}
+						}
+					}
+				}
+				if (!itemExists) {
+					System.out.println("Could not find item called " + itemName);
+				}
+			}while(!itemExists);
 		}
 	}
 
