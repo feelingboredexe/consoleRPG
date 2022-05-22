@@ -5,15 +5,17 @@ public class Entities {
 	int level;
 	int damage;
 	int expMultiplier;
+	double critDamage = 0.5;
+	int critChance = 5;
 	String name;
 	Abilities[] abilityList = new Abilities[5];
 
 	public int takeDmg(int attackerDamage, Random damageMultiplier, int critChance, double critDamage) {
-		int crit = damageMultiplier.nextInt(100) + 1;
-		double critMultiplier = 1;
-		if (crit <= critChance) {
+		int crit = damageMultiplier.nextInt(100) + 1; // Generate number between 1 and 100
+		double critMultiplier = 1; // Crit multiplier that is calculated with crit damage
+		if (crit <= critChance) { // If the crit number is less than or equal to the crit chance
 			System.out.println("Critical hit!");
-			critMultiplier += critDamage;
+			critMultiplier += critDamage; // Modify crit multiplier to have added crit damage onto it
 		}
 		int takenDamage = attackerDamage * (int)((((int)((0.5 + 1.3 * damageMultiplier.nextDouble()) + 0.5)) * critMultiplier) + 0.5);
 		health -= takenDamage;
@@ -24,11 +26,9 @@ public class Entities {
 class Player extends Entities {
 	int exp; // player experience
 	Items[] items = new Items[100]; // player items
-	Weapons weapon;
-	int itemIndex = 0;
-	boolean guarding;
-	double critDamage = 0.5;
-	int critChance = 5;
+	Weapons weapon; // Equipped weapon
+	int itemIndex = 0; // The amount of items in their inventory
+	boolean guarding; // Whether or not they are guarding
 
 	public Player(int expVal) {
 		exp = expVal;
@@ -56,10 +56,14 @@ class Player extends Entities {
 	}
 	
 	public void setDamage() {
+		critChance = 5; // Reset crit values
+		critDamage = 0.5;
 		if (weapon == null) {
 			damage = level;
 		} else {
 			damage = weapon.damage;
+			critChance += weapon.critChance; // Adds on the bonus crit values on items to the character
+			critDamage += weapon.critDamage;
 		}
 	}
 
