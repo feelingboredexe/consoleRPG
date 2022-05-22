@@ -47,7 +47,7 @@ public class GameMethods {
 					userTarget = input.next().charAt(0);
 					if (userTarget >= '0' || userTarget <= '9') { // Checks if they entered a number
 						targetIndex = (int) userTarget - 49; // Sets targetIndex to the userTarget
-						if (targetIndex > mobCount || targetIndex < 0) { //
+						if (targetIndex > targets.length-1 || targetIndex < 0) { //
 							System.out.println("Please target a valid monster.");
 							isValidTarget = false;
 						} else if (targets[targetIndex].health <= 0) {
@@ -108,11 +108,13 @@ public class GameMethods {
 		}
 	}
 
-	public static void battleRewards(Player player, Random itemGen) {
+	public static void battleRewards(Player player, Random itemGen) { // This is what I need help with oli [Carlo]
 		int itemValue = itemGen.nextInt(100) + 1;
-		int weaponRarity;
+		int itemIndex;
+		int weaponRarity; // Determines type of weapon to get
 		boolean recievedWeapon;
 		if (itemValue > 50) { // 50% chance to not get a weapon
+			weaponRarity = 0;
 			recievedWeapon = false;
 		} else if (itemValue > 16) { // 34% chance for common
 			weaponRarity = 0;
@@ -128,9 +130,32 @@ public class GameMethods {
 			recievedWeapon = true;
 		}
 		if(recievedWeapon) {
-			BasicSword basicSword = new BasicSword();
-			player.addItem(basicSword);
-			System.out.println("You found the " + basicSword.name);
+			if(weaponRarity == 0) {
+				itemIndex = itemGen.nextInt(2); // Generates an index for an item at rarity 0
+				if(itemIndex == 0) { // Compares index and makes object for the item
+					Weapons newWeapon = new BasicSword();
+					player.addItem(newWeapon);
+					System.out.println("You found the " + newWeapon.name);
+				} else if (itemIndex == 1) {  // Compares index and makes object for the item
+					Weapons newWeapon = new ChippedKnife();
+					player.addItem(newWeapon);
+					System.out.println("You found the " + newWeapon.name);
+				}
+			} else if (weaponRarity == 1) {
+				itemIndex = itemGen.nextInt(1); // Generates an index for an item at rarity 1
+				if (itemIndex == 0) { // Compares index and makes object for the item
+					Weapons newWeapon = new BoxingGloves();
+					player.addItem(newWeapon);
+					System.out.println("You found the " + newWeapon.name);
+				}
+			} else if (weaponRarity == 3) {
+				itemIndex = itemGen.nextInt(1); // Generates an index for an item at rarity 3
+				if(itemIndex == 0) { // Compares index and makes object for the item
+					Weapons newWeapon = new Myrtenaster();
+					player.addItem(newWeapon);
+					System.out.println("You found the " + newWeapon.name);
+				}
+			}
 		}
 	}
 	
@@ -143,24 +168,28 @@ public class GameMethods {
 		action = input.next().charAt(0);
 		if (action == '0') { // If the player chooses to inspect themselves
 			player.inspectSelf();
-		} else if (action == '1') {
+		} else if (action == '1') { // If the player chooses to equip an item
 			player.displayInventory();
 			do {
-				itemExists = false;
+				itemExists = false; // Assumes the item does not exist
 				System.out.println("Which item would you like to equip? ");
 				itemName = input.nextLine();
-				for(Items item: player.items) {
-					if (!(item == null)) {
-						if (item.name.equals(itemName)) {
-							itemExists = true;
-							if(item instanceof Weapons) {
-								player.equipWeapon((Weapons) item);
+				if (!itemName.equalsIgnoreCase("Back")) { // If the player does not choose to leave the item selection menu
+					for (Items item : player.items) {
+						if (!(item == null)) {
+							if (item.name.equals(itemName)) {
+								itemExists = true; // When proven wrong allow the loop to close
+								if (item instanceof Weapons) {
+									player.equipWeapon((Weapons) item);
+								}
 							}
 						}
 					}
-				}
-				if (!itemExists) {
-					System.out.println("Could not find item called " + itemName);
+					if (!itemExists) { // Loops to let player search for specific items
+						System.out.println("Could not find item called " + itemName);
+					}
+				} else {
+					itemExists = true; // Exits menu if they enter "back"
 				}
 			}while(!itemExists);
 		}

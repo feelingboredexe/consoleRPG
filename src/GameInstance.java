@@ -23,7 +23,11 @@ public class GameInstance {
 			// User Action
 			action = input.next().charAt(0);
 			if (action == '0') {
-				break;
+				System.out.println("Are you sure? (0 again to exit)");
+				action = input.next().charAt(0);
+				if (action == '0') {
+					break;
+				}
 			} else if (action == '1') {
 				// Reset exp gained
 				expGain = 0;

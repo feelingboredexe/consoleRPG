@@ -17,7 +17,7 @@ public class Entities {
 			System.out.println("Critical hit!");
 			critMultiplier += critDamage; // Modify crit multiplier to have added crit damage onto it
 		}
-		int takenDamage = attackerDamage * (int)((((int)((0.5 + 1.3 * damageMultiplier.nextDouble()) + 0.5)) * critMultiplier) + 0.5);
+		int takenDamage = (int) (attackerDamage * (((((0.5 + 1.3 * damageMultiplier.nextDouble()) + 0.5)) * critMultiplier) + 0.5));
 		if (health - takenDamage < 0) {
 			health = 0;
 		} else {
@@ -51,8 +51,12 @@ class Player extends Entities {
 	}
 	
 	public void addItem(Items item) {
-		items[itemIndex] = item;
-		itemIndex++;
+		if (!(itemIndex > 99)) {
+			items[itemIndex] = item;
+			itemIndex++;
+		} else {
+			System.out.println("Inventory is full!");
+		}
 	}
 	
 	public void equipWeapon(Weapons equipWeapon) {
@@ -65,7 +69,7 @@ class Player extends Entities {
 		if (weapon == null) {
 			damage = level;
 		} else {
-			damage = weapon.damage;
+			damage = weapon.damage + level;
 			critChance += weapon.critChance; // Adds on the bonus crit values on items to the character
 			critDamage += weapon.critDamage;
 		}
@@ -82,6 +86,8 @@ class Player extends Entities {
 		System.out.println("You have " + damage + " damage");
 		System.out.println("You have " + exp + " experience points");
 		System.out.println("You are at level " + level);
+		System.out.println("You have a " + critChance + "% chance to crit");
+		System.out.println("You have a " + critDamage + " bonus damage to crits");
 	}
 
 	public void displayInventory() {
