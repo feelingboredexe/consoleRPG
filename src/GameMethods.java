@@ -87,21 +87,23 @@ public class GameMethods {
 			if (player.health <= 0) { // If the player is dead stop the loop
 				break;
 			}
-			for(Abilities ability: monster.abilityList) { // Prioritizes abilities and runs through each one
-				if (!(ability == null)) {
-					if(ability.castable) {
-						endTurn = true; // Ends the turn prematurely and casts the ability
-						break;
+			if (monster.health > 0) { // Checks if monster is alive
+				for (Abilities ability : monster.abilityList) { // Prioritizes abilities and runs through each one
+					if (!(ability == null)) {
+						if (ability.castable) {
+							endTurn = true; // Ends the turn prematurely and casts the ability
+							break;
+						}
 					}
 				}
-			}
-			if (!endTurn && monster.health > 0) { // If the monster did not end it's turn and is alive
-				if (player.guarding) { // Is player guarding
-					System.out.println("The " + monster.name + " did " + player.takeDmg(monster.damage/2, damageMultiplier, monster.critChance, monster.critDamage) + " to you!");
-				} else {
-					System.out.println("The " + monster.name + " did " + player.takeDmg(monster.damage, damageMultiplier, monster.critChance, monster.critDamage) + " to you!");
+				if (!endTurn) { // If the monster did not end it's turn
+					if (player.guarding) { // Is player guarding
+						System.out.println("The " + monster.name + " did " + player.takeDmg(monster.damage / 2, damageMultiplier, monster.critChance, monster.critDamage) + " to you!");
+					} else {
+						System.out.println("The " + monster.name + " did " + player.takeDmg(monster.damage, damageMultiplier, monster.critChance, monster.critDamage) + " to you!");
+					}
+					System.out.println("You have " + player.health + " health");
 				}
-				System.out.println("You have " + player.health + " health");
 			}
 		}
 	}
